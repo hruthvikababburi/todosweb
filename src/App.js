@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import Login from './components/Auth/Login';
+import Signup from './components/Auth/Signup';
+import Tasks from './components/Tasks';
+import Profile from './components/Profile';
+import Navbar from './components/Navbar';
 
-function App() {
+const App = () => {
+  const isAuthenticated = !!localStorage.getItem('token'); // Checks if user is logged in
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/login" element={isAuthenticated ? <Navigate to="/tasks" /> : <Login />} />
+        <Route path="/signup" element={isAuthenticated ? <Navigate to="/tasks" /> : <Signup />} />
+        <Route path="/tasks" element={isAuthenticated ? <Tasks /> : <Navigate to="/login" />} />
+        <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/login" />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
